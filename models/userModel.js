@@ -3,22 +3,10 @@ import bcrypt from 'bcryptjs'
 
 //Creating Schema using mongoose
 const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  token: {
-    type: String,
-  },
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  token: { type: String },
 })
 
 userSchema.methods.matchPassword = async function (enteredPassword) {

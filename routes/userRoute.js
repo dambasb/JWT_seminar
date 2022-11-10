@@ -1,15 +1,15 @@
-//Requiring all the necessary files and libraries
+// Requiring all the necessary files and libraries
 import express from 'express'
 import generateToken from '../utils/generateToken.js'
-//Creating express router
+// Creating express router
 const router = express.Router()
-
+// Users controllers
 import {
   authUser,
   getUserProfile,
   registerUser,
 } from '../controllers/userController.js'
-//Importing userModel
+// Importing userModel
 import User from '../models/userModel.js'
 
 router.route('/').post(registerUser)
