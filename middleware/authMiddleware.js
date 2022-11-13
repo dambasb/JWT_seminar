@@ -1,17 +1,28 @@
 import jwt from 'jsonwebtoken'
-// GET JWT
-const isAuthenticated = async (req, res, next) => {
-  try {
-    const { token } = req.cookies
-    if (!token) {
-      return next('Please login to access the data')
+import User from '../models/userModel.js'
+
+const protect = async (req, res, next) => {
+  let token
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    try {
+      token = req.headers.authorization.split(' ')[1]
+      const decoded = jwt.verify(token, process.env.SECRET_KEY)
+      req.user = await User.findById(decoded.id).select('-password')
+      next()
+    } catch (error) {
+      console.error(error)
+      res.status(401)
+      return res.json('Not authorized, token failed')
     }
-    const verify = await jwt.verify(token, process.env.SECRET_KEY)
-    req.user = await userModel.findById(verify.id)
-    next()
-  } catch (error) {
-    return next(error)
+  }
+  if (!token) {
+    res.status(401)
+    return res.json('Not authorized, no token')
   }
 }
 
-export { isAuthenticated }
+export { protect }

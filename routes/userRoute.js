@@ -1,6 +1,5 @@
 // Requiring all the necessary files and libraries
 import express from 'express'
-import generateToken from '../utils/generateToken.js'
 // Creating express router
 const router = express.Router()
 // Users controllers
@@ -9,11 +8,11 @@ import {
   getUserProfile,
   registerUser,
 } from '../controllers/userController.js'
-// Importing userModel
-import User from '../models/userModel.js'
+// Import middleware for protecting route
+import { protect } from '../middleware/authMiddleware.js'
 
 router.route('/').post(registerUser)
 router.post('/login', authUser)
-router.route('/profile').get(getUserProfile)
+router.route('/profile').get(protect, getUserProfile)
 
 export default router
